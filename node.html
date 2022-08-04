@@ -1,0 +1,552 @@
+<script type="text/javascript">
+    RED.nodes.registerType('oura-api', {
+        category: 'function',
+        color: '#89bf04',
+        defaults: {
+            service: { value: "", type: "oura-api-service", required: true },
+            method: { value: "", required: true },
+            daily_activity_route_daily_activity_get_startDate: { value: "" },
+            daily_activity_route_daily_activity_get_startDateType: { value: "str" },
+            daily_activity_route_daily_activity_get_endDate: { value: "" },
+            daily_activity_route_daily_activity_get_endDateType: { value: "str" },
+            daily_activity_route_daily_activity_get_nextToken: { value: "" },
+            daily_activity_route_daily_activity_get_nextTokenType: { value: "str" },
+            heartrate_route_heartrate_get_startDatetime: { value: "" },
+            heartrate_route_heartrate_get_startDatetimeType: { value: "str" },
+            heartrate_route_heartrate_get_endDatetime: { value: "" },
+            heartrate_route_heartrate_get_endDatetimeType: { value: "str" },
+            heartrate_route_heartrate_get_nextToken: { value: "" },
+            heartrate_route_heartrate_get_nextTokenType: { value: "str" },
+            sessions_route_session_get_startDate: { value: "" },
+            sessions_route_session_get_startDateType: { value: "str" },
+            sessions_route_session_get_endDate: { value: "" },
+            sessions_route_session_get_endDateType: { value: "str" },
+            sessions_route_session_get_nextToken: { value: "" },
+            sessions_route_session_get_nextTokenType: { value: "str" },
+            tags_route_tag_get_startDate: { value: "" },
+            tags_route_tag_get_startDateType: { value: "str" },
+            tags_route_tag_get_endDate: { value: "" },
+            tags_route_tag_get_endDateType: { value: "str" },
+            tags_route_tag_get_nextToken: { value: "" },
+            tags_route_tag_get_nextTokenType: { value: "str" },
+            workouts_route_workout_get_startDate: { value: "" },
+            workouts_route_workout_get_startDateType: { value: "str" },
+            workouts_route_workout_get_endDate: { value: "" },
+            workouts_route_workout_get_endDateType: { value: "str" },
+            workouts_route_workout_get_nextToken: { value: "" },
+            workouts_route_workout_get_nextTokenType: { value: "str" },
+            name: { value: "" }
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: 'icon.png',
+        label: function () {
+            return this.name || this.method || "oura-api";
+        },
+        labelStyle: function() {
+            return this.name?"node_label_italic":"";
+        },
+        oneditprepare: function () {
+            var selectedMethod = $('#node-input-method option:selected');
+            if (!selectedMethod.val()) {
+                var methods = $('#node-input-method').children();
+                var firstMethod = methods.first();
+                $('#node-input-method').val(firstMethod.val());
+            }
+
+            var showParameters = function () {
+
+                $("#node-input-daily_activity_route_daily_activity_get_startDate").typedInput({
+                    default: 'str',
+                    typeField: $("#node-input-daily_activity_route_daily_activity_get_startDateType"),
+                    types: ['str', 'msg']
+                });
+
+                $("#daily_activity_route_daily_activity_get_startDate").hide();
+
+                $("#node-input-daily_activity_route_daily_activity_get_endDate").typedInput({
+                    default: 'str',
+                    typeField: $("#node-input-daily_activity_route_daily_activity_get_endDateType"),
+                    types: ['str', 'msg']
+                });
+
+                $("#daily_activity_route_daily_activity_get_endDate").hide();
+
+                $("#node-input-daily_activity_route_daily_activity_get_nextToken").typedInput({
+                    default: 'str',
+                    typeField: $("#node-input-daily_activity_route_daily_activity_get_nextTokenType"),
+                    types: ['str', 'msg']
+                });
+
+                $("#daily_activity_route_daily_activity_get_nextToken").hide();
+
+                $("#node-input-heartrate_route_heartrate_get_startDatetime").typedInput({
+                    default: 'str',
+                    typeField: $("#node-input-heartrate_route_heartrate_get_startDatetimeType"),
+                    types: ['str', 'msg']
+                });
+
+                $("#heartrate_route_heartrate_get_startDatetime").hide();
+
+                $("#node-input-heartrate_route_heartrate_get_endDatetime").typedInput({
+                    default: 'str',
+                    typeField: $("#node-input-heartrate_route_heartrate_get_endDatetimeType"),
+                    types: ['str', 'msg']
+                });
+
+                $("#heartrate_route_heartrate_get_endDatetime").hide();
+
+                $("#node-input-heartrate_route_heartrate_get_nextToken").typedInput({
+                    default: 'str',
+                    typeField: $("#node-input-heartrate_route_heartrate_get_nextTokenType"),
+                    types: ['str', 'msg']
+                });
+
+                $("#heartrate_route_heartrate_get_nextToken").hide();
+
+                $("#node-input-sessions_route_session_get_startDate").typedInput({
+                    default: 'str',
+                    typeField: $("#node-input-sessions_route_session_get_startDateType"),
+                    types: ['str', 'msg']
+                });
+
+                $("#sessions_route_session_get_startDate").hide();
+
+                $("#node-input-sessions_route_session_get_endDate").typedInput({
+                    default: 'str',
+                    typeField: $("#node-input-sessions_route_session_get_endDateType"),
+                    types: ['str', 'msg']
+                });
+
+                $("#sessions_route_session_get_endDate").hide();
+
+                $("#node-input-sessions_route_session_get_nextToken").typedInput({
+                    default: 'str',
+                    typeField: $("#node-input-sessions_route_session_get_nextTokenType"),
+                    types: ['str', 'msg']
+                });
+
+                $("#sessions_route_session_get_nextToken").hide();
+
+                $("#node-input-tags_route_tag_get_startDate").typedInput({
+                    default: 'str',
+                    typeField: $("#node-input-tags_route_tag_get_startDateType"),
+                    types: ['str', 'msg']
+                });
+
+                $("#tags_route_tag_get_startDate").hide();
+
+                $("#node-input-tags_route_tag_get_endDate").typedInput({
+                    default: 'str',
+                    typeField: $("#node-input-tags_route_tag_get_endDateType"),
+                    types: ['str', 'msg']
+                });
+
+                $("#tags_route_tag_get_endDate").hide();
+
+                $("#node-input-tags_route_tag_get_nextToken").typedInput({
+                    default: 'str',
+                    typeField: $("#node-input-tags_route_tag_get_nextTokenType"),
+                    types: ['str', 'msg']
+                });
+
+                $("#tags_route_tag_get_nextToken").hide();
+
+                $("#node-input-workouts_route_workout_get_startDate").typedInput({
+                    default: 'str',
+                    typeField: $("#node-input-workouts_route_workout_get_startDateType"),
+                    types: ['str', 'msg']
+                });
+
+                $("#workouts_route_workout_get_startDate").hide();
+
+                $("#node-input-workouts_route_workout_get_endDate").typedInput({
+                    default: 'str',
+                    typeField: $("#node-input-workouts_route_workout_get_endDateType"),
+                    types: ['str', 'msg']
+                });
+
+                $("#workouts_route_workout_get_endDate").hide();
+
+                $("#node-input-workouts_route_workout_get_nextToken").typedInput({
+                    default: 'str',
+                    typeField: $("#node-input-workouts_route_workout_get_nextTokenType"),
+                    types: ['str', 'msg']
+                });
+
+                $("#workouts_route_workout_get_nextToken").hide();
+
+                $("#optional-parameters").hide();
+                $("#optional-parameters-label").hide();
+                if ($("#node-input-method").val() === 'daily_activity_route_daily_activity_get') {
+
+                    $("#optional-parameters").show();
+                    $("#optional-parameters-label").show();
+                    
+                }
+                if ($("#node-input-method").val() === 'heartrate_route_heartrate_get') {
+
+                    $("#optional-parameters").show();
+                    $("#optional-parameters-label").show();
+                    
+                }
+                if ($("#node-input-method").val() === 'personal_info_route_get') {
+
+                }
+                if ($("#node-input-method").val() === 'sessions_route_session_get') {
+
+                    $("#optional-parameters").show();
+                    $("#optional-parameters-label").show();
+                    
+                }
+                if ($("#node-input-method").val() === 'tags_route_tag_get') {
+
+                    $("#optional-parameters").show();
+                    $("#optional-parameters-label").show();
+                    
+                }
+                if ($("#node-input-method").val() === 'workouts_route_workout_get') {
+
+                    $("#optional-parameters").show();
+                    $("#optional-parameters-label").show();
+                    
+                }
+
+                if ($("#optional-parameters").prop('checked')) {
+                    if ($("#node-input-method").val() === 'daily_activity_route_daily_activity_get') {
+
+                        $("#daily_activity_route_daily_activity_get_startDate").show();
+                        
+                        $("#daily_activity_route_daily_activity_get_endDate").show();
+                        
+                        $("#daily_activity_route_daily_activity_get_nextToken").show();
+                        
+                    }
+                    if ($("#node-input-method").val() === 'heartrate_route_heartrate_get') {
+
+                        $("#heartrate_route_heartrate_get_startDatetime").show();
+                        
+                        $("#heartrate_route_heartrate_get_endDatetime").show();
+                        
+                        $("#heartrate_route_heartrate_get_nextToken").show();
+                        
+                    }
+                    if ($("#node-input-method").val() === 'personal_info_route_get') {
+
+                    }
+                    if ($("#node-input-method").val() === 'sessions_route_session_get') {
+
+                        $("#sessions_route_session_get_startDate").show();
+                        
+                        $("#sessions_route_session_get_endDate").show();
+                        
+                        $("#sessions_route_session_get_nextToken").show();
+                        
+                    }
+                    if ($("#node-input-method").val() === 'tags_route_tag_get') {
+
+                        $("#tags_route_tag_get_startDate").show();
+                        
+                        $("#tags_route_tag_get_endDate").show();
+                        
+                        $("#tags_route_tag_get_nextToken").show();
+                        
+                    }
+                    if ($("#node-input-method").val() === 'workouts_route_workout_get') {
+
+                        $("#workouts_route_workout_get_startDate").show();
+                        
+                        $("#workouts_route_workout_get_endDate").show();
+                        
+                        $("#workouts_route_workout_get_nextToken").show();
+                        
+                    }
+                } else {
+                    if ($("#node-input-method").val() === 'daily_activity_route_daily_activity_get') {
+
+                    }
+                    if ($("#node-input-method").val() === 'heartrate_route_heartrate_get') {
+
+                    }
+                    if ($("#node-input-method").val() === 'personal_info_route_get') {
+
+                    }
+                    if ($("#node-input-method").val() === 'sessions_route_session_get') {
+
+                    }
+                    if ($("#node-input-method").val() === 'tags_route_tag_get') {
+
+                    }
+                    if ($("#node-input-method").val() === 'workouts_route_workout_get') {
+
+                    }
+                }
+            };
+
+            $("#node-input-method").change(function () {
+                showParameters();
+            });
+
+            $("#optional-parameters").change(function () {
+                showParameters();
+            });
+
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="oura-api">
+    <div class="form-row">
+        <label for="node-input-service"><i class="fa fa-cloud"></i> <span data-i18n="OuraApi.label.service"></span></label>
+        <input type="text" id="node-input-service">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-method"><i class="fa fa-tasks"></i> <span data-i18n="OuraApi.label.method"></span></label>
+        <select id="node-input-method">
+            <option value="daily_activity_route_daily_activity_get" data-i18n="OuraApi.parameters.daily_activity_route_daily_activity_get"></option>
+            <option value="heartrate_route_heartrate_get" data-i18n="OuraApi.parameters.heartrate_route_heartrate_get"></option>
+            <option value="personal_info_route_get" data-i18n="OuraApi.parameters.personal_info_route_get"></option>
+            <option value="sessions_route_session_get" data-i18n="OuraApi.parameters.sessions_route_session_get"></option>
+            <option value="tags_route_tag_get" data-i18n="OuraApi.parameters.tags_route_tag_get"></option>
+            <option value="workouts_route_workout_get" data-i18n="OuraApi.parameters.workouts_route_workout_get"></option>
+        </select>
+        &nbsp;
+        <input type="checkbox" id="optional-parameters" style="margin-left: 10px; vertical-align: text-bottom; width: auto;">
+        <label for="optional-parameters" id="optional-parameters-label" style="width: auto;"> <span data-i18n="OuraApi.parameters.optionalParameters"></span></label>
+    </div>
+
+    <div class="form-row" id="daily_activity_route_daily_activity_get_startDate">
+        <label for="node-input-daily_activity_route_daily_activity_get_startDate"><i class="fa fa-list"></i> <span data-i18n="OuraApi.parameters.startDate"></span></label>
+
+        <input type="text" id="node-input-daily_activity_route_daily_activity_get_startDate" placeholder="```YYYY-MM-DD``` formatted start date [default: ```end_date``` - 1 day]" style="width:70%">
+        <input type="hidden" id="node-input-daily_activity_route_daily_activity_get_startDateType">
+    </div>
+
+    <div class="form-row" id="daily_activity_route_daily_activity_get_endDate">
+        <label for="node-input-daily_activity_route_daily_activity_get_endDate"><i class="fa fa-list"></i> <span data-i18n="OuraApi.parameters.endDate"></span></label>
+
+        <input type="text" id="node-input-daily_activity_route_daily_activity_get_endDate" placeholder="```YYYY-MM-DD``` formatted end date [default: current UTC date]" style="width:70%">
+        <input type="hidden" id="node-input-daily_activity_route_daily_activity_get_endDateType">
+    </div>
+
+    <div class="form-row" id="daily_activity_route_daily_activity_get_nextToken">
+        <label for="node-input-daily_activity_route_daily_activity_get_nextToken"><i class="fa fa-list"></i> <span data-i18n="OuraApi.parameters.nextToken"></span></label>
+
+        <input type="text" id="node-input-daily_activity_route_daily_activity_get_nextToken" placeholder="Pagination token" style="width:70%">
+        <input type="hidden" id="node-input-daily_activity_route_daily_activity_get_nextTokenType">
+    </div>
+
+    <div class="form-row" id="heartrate_route_heartrate_get_startDatetime">
+        <label for="node-input-heartrate_route_heartrate_get_startDatetime"><i class="fa fa-list"></i> <span data-i18n="OuraApi.parameters.startDatetime"></span></label>
+
+        <input type="text" id="node-input-heartrate_route_heartrate_get_startDatetime" placeholder="ISO 8601 formatted start timestamp [default: ```end_datetime``` - 1 day]" style="width:70%">
+        <input type="hidden" id="node-input-heartrate_route_heartrate_get_startDatetimeType">
+    </div>
+
+    <div class="form-row" id="heartrate_route_heartrate_get_endDatetime">
+        <label for="node-input-heartrate_route_heartrate_get_endDatetime"><i class="fa fa-list"></i> <span data-i18n="OuraApi.parameters.endDatetime"></span></label>
+
+        <input type="text" id="node-input-heartrate_route_heartrate_get_endDatetime" placeholder="ISO 8601 formatted end timestamp [default: current UTC timestamp]" style="width:70%">
+        <input type="hidden" id="node-input-heartrate_route_heartrate_get_endDatetimeType">
+    </div>
+
+    <div class="form-row" id="heartrate_route_heartrate_get_nextToken">
+        <label for="node-input-heartrate_route_heartrate_get_nextToken"><i class="fa fa-list"></i> <span data-i18n="OuraApi.parameters.nextToken"></span></label>
+
+        <input type="text" id="node-input-heartrate_route_heartrate_get_nextToken" placeholder="Pagination token" style="width:70%">
+        <input type="hidden" id="node-input-heartrate_route_heartrate_get_nextTokenType">
+    </div>
+
+    <div class="form-row" id="sessions_route_session_get_startDate">
+        <label for="node-input-sessions_route_session_get_startDate"><i class="fa fa-list"></i> <span data-i18n="OuraApi.parameters.startDate"></span></label>
+
+        <input type="text" id="node-input-sessions_route_session_get_startDate" placeholder="```YYYY-MM-DD``` formatted start date [default: ```end_date``` - 1 day]" style="width:70%">
+        <input type="hidden" id="node-input-sessions_route_session_get_startDateType">
+    </div>
+
+    <div class="form-row" id="sessions_route_session_get_endDate">
+        <label for="node-input-sessions_route_session_get_endDate"><i class="fa fa-list"></i> <span data-i18n="OuraApi.parameters.endDate"></span></label>
+
+        <input type="text" id="node-input-sessions_route_session_get_endDate" placeholder="```YYYY-MM-DD``` formatted end date [default: current UTC date]" style="width:70%">
+        <input type="hidden" id="node-input-sessions_route_session_get_endDateType">
+    </div>
+
+    <div class="form-row" id="sessions_route_session_get_nextToken">
+        <label for="node-input-sessions_route_session_get_nextToken"><i class="fa fa-list"></i> <span data-i18n="OuraApi.parameters.nextToken"></span></label>
+
+        <input type="text" id="node-input-sessions_route_session_get_nextToken" placeholder="Pagination token" style="width:70%">
+        <input type="hidden" id="node-input-sessions_route_session_get_nextTokenType">
+    </div>
+
+    <div class="form-row" id="tags_route_tag_get_startDate">
+        <label for="node-input-tags_route_tag_get_startDate"><i class="fa fa-list"></i> <span data-i18n="OuraApi.parameters.startDate"></span></label>
+
+        <input type="text" id="node-input-tags_route_tag_get_startDate" placeholder="```YYYY-MM-DD``` formatted start date [default: ```end_date``` - 1 day]" style="width:70%">
+        <input type="hidden" id="node-input-tags_route_tag_get_startDateType">
+    </div>
+
+    <div class="form-row" id="tags_route_tag_get_endDate">
+        <label for="node-input-tags_route_tag_get_endDate"><i class="fa fa-list"></i> <span data-i18n="OuraApi.parameters.endDate"></span></label>
+
+        <input type="text" id="node-input-tags_route_tag_get_endDate" placeholder="```YYYY-MM-DD``` formatted end date [default: current UTC date]" style="width:70%">
+        <input type="hidden" id="node-input-tags_route_tag_get_endDateType">
+    </div>
+
+    <div class="form-row" id="tags_route_tag_get_nextToken">
+        <label for="node-input-tags_route_tag_get_nextToken"><i class="fa fa-list"></i> <span data-i18n="OuraApi.parameters.nextToken"></span></label>
+
+        <input type="text" id="node-input-tags_route_tag_get_nextToken" placeholder="Pagination token" style="width:70%">
+        <input type="hidden" id="node-input-tags_route_tag_get_nextTokenType">
+    </div>
+
+    <div class="form-row" id="workouts_route_workout_get_startDate">
+        <label for="node-input-workouts_route_workout_get_startDate"><i class="fa fa-list"></i> <span data-i18n="OuraApi.parameters.startDate"></span></label>
+
+        <input type="text" id="node-input-workouts_route_workout_get_startDate" placeholder="```YYYY-MM-DD``` formatted start date [default: ```end_date``` - 1 day]" style="width:70%">
+        <input type="hidden" id="node-input-workouts_route_workout_get_startDateType">
+    </div>
+
+    <div class="form-row" id="workouts_route_workout_get_endDate">
+        <label for="node-input-workouts_route_workout_get_endDate"><i class="fa fa-list"></i> <span data-i18n="OuraApi.parameters.endDate"></span></label>
+
+        <input type="text" id="node-input-workouts_route_workout_get_endDate" placeholder="```YYYY-MM-DD``` formatted end date [default: current UTC date]" style="width:70%">
+        <input type="hidden" id="node-input-workouts_route_workout_get_endDateType">
+    </div>
+
+    <div class="form-row" id="workouts_route_workout_get_nextToken">
+        <label for="node-input-workouts_route_workout_get_nextToken"><i class="fa fa-list"></i> <span data-i18n="OuraApi.parameters.nextToken"></span></label>
+
+        <input type="text" id="node-input-workouts_route_workout_get_nextToken" placeholder="Pagination token" style="width:70%">
+        <input type="hidden" id="node-input-workouts_route_workout_get_nextTokenType">
+    </div>
+
+    <hr/>
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
+        <input type="text" id="node-input-name" data-i18n="[placeholder]node-red:common.label.name">
+    </div>
+</script>
+
+<script type="text/html" data-help-name="oura-api">
+
+    <p># Overview 
+
+The Oura API allows Oura users and partner applications to improve their user experience with Oura data.
+
+This document describes the Oura API Version 2 (V2), which supports access to the latest Oura Ring data types.
+ For access to other data types—which have not yet migrated to V2—refer to the [Oura API Version 1 (V1)](https://cloud.ouraring.com/docs/) documentation.
+
+# Data Access
+
+Individual Oura users can access their own data through the API by using a [Personal Access Token](https://cloud.ouraring.com/personal-access-tokens).
+
+If you want to retrieve data for multiple users, a registered [API Application](https://cloud.ouraring.com/oauth/applications) is required.
+ API Applications are limited to **10** users before requiring approval from Oura. There is no limit once an application is approved.
+ Additionally, Oura users **must provide consent** to share each data type an API Application has access to.
+
+All data access requests through the Oura API require [Authentication](https://cloud.ouraring.com/docs/authentication).
+
+Additionally, we recommend that Oura users keep their mobile app updated to support API access for the latest data types.
+ The Oura API V2 returns a 426 response code for users who do not have an updated version of the app installed.
+
+# Authentication
+
+The Oura API provides two methods for Authentication: (1) the OAuth2 protocol and (2) Personal Access Tokens. For more information on the OAuth2 flow, see our [Authentication instructions](https://cloud.ouraring.com/docs/authentication).
+
+Access tokens must be included in the request header as follows:
+```http
+GET /v2/usercollection/personal_info HTTP/1.1
+Host: api.ouraring.com
+Authorization: Bearer <token>
+```
+
+# Oura HTTP Response Codes
+
+| Response Code                        | Description |
+| ------------------------------------ | - |
+| 200 OK                               | Successful Response         |
+| 400 Query Parameter Validation Error | The request contains query parameters that are invalid or incorrectly formatted. |
+| 426 Minimum App Version Error        | The Oura user's mobile app does not meet the minimum app version requirement to support sharing the requested data type. The Oura user must update their mobile app to enable API access for the requested data type. |
+| 429 Request Rate Limit Exceeded        | The API is rate limited to 5000 requests in a 5 minute period. You will receive a 429 error code if you exceed this limit. [Contact us](mailto:api-support@ouraring.com) if you expect your usage to exceed this limit.| </p>
+    <p><b>Methods</b></p>
+        <h3>GET /v2/usercollection/daily_activity</h3>
+        <p>Returns Oura Daily Activity data for the specified Oura user within a given timeframe</p>
+        <dl class="message-properties">
+        <dt>start_date <span class="property-type">string</span></dt>
+        <dt>end_date <span class="property-type">string</span></dt>
+        <dt>next_token <span class="property-type">string</span></dt>
+        </dl>
+        <h3>GET /v2/usercollection/heartrate</h3>
+        <p>Returns available heart rate data for a specified Oura user within a given timeframe</p>
+        <dl class="message-properties">
+        <dt>start_datetime <span class="property-type">string</span></dt>
+        <dt>end_datetime <span class="property-type">string</span></dt>
+        <dt>next_token <span class="property-type">string</span></dt>
+        </dl>
+        <h3>GET /v2/usercollection/personal_info</h3>
+        <p>Returns personal info data for the specified Oura user.</p>
+        <dl class="message-properties">
+        </dl>
+        <h3>GET /v2/usercollection/session</h3>
+        <p>Returns available Oura session data for the specified Oura user within a given timeframe</p>
+        <dl class="message-properties">
+        <dt>start_date <span class="property-type">string</span></dt>
+        <dt>end_date <span class="property-type">string</span></dt>
+        <dt>next_token <span class="property-type">string</span></dt>
+        </dl>
+        <h3>GET /v2/usercollection/tag</h3>
+        <p>Returns Oura tags data for the specified Oura user within a given timeframe</p>
+        <dl class="message-properties">
+        <dt>start_date <span class="property-type">string</span></dt>
+        <dt>end_date <span class="property-type">string</span></dt>
+        <dt>next_token <span class="property-type">string</span></dt>
+        </dl>
+        <h3>GET /v2/usercollection/workout</h3>
+        <p>Returns available Oura workout data for the specified Oura user within a given timeframe</p>
+        <dl class="message-properties">
+        <dt>start_date <span class="property-type">string</span></dt>
+        <dt>end_date <span class="property-type">string</span></dt>
+        <dt>next_token <span class="property-type">string</span></dt>
+        </dl>
+</script>
+<script type="text/javascript">
+    RED.nodes.registerType('oura-api-service', {
+        category: 'config',
+        defaults: {
+            host: { value: "", required: true },
+
+
+            name: { value: "" },
+        },
+        credentials: {
+            temp: { type: "text" }
+        },
+        label: function () {
+            return this.name || this.host;
+        },
+        labelStyle: function() {
+            return this.name?"node_label_italic":"";
+        },
+        oneditprepare: function () {
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="oura-api-service">
+    <div class="form-row">
+        <label for="node-config-input-host"><i class="fa fa-globe"></i> <span data-i18n="OuraApi.label.host"></span></label>
+        <input type="text" id="node-config-input-host" placeholder="http://localhost:1880">
+    </div>
+
+
+    <div class="form-row">
+        <label for="node-config-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
+        <input type="text" id="node-config-input-name" data-i18n="[placeholder]node-red:common.label.name">
+    </div>
+</script>
+
+<script type="text/html" data-help-name="oura-api-service">
+    <p><b>Host</b>: URL to connect</p>
+
+</script>

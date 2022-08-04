@@ -1,0 +1,29 @@
+{
+    "OuraApi": {
+        "label": {
+            "service": "Service",
+            "method": "Method",
+            "host": "Host",
+            "header": "Header",
+            "value": "Value",
+            "isQuery": "isQuery"
+        },
+        "status": {
+            "requesting": "requesting"
+        },
+        "parameters": {
+            "daily_activity_route_daily_activity_get": "GET /v2/usercollection/daily_activity",
+            "startDate": "start_date",
+            "endDate": "end_date",
+            "nextToken": "next_token",
+            "heartrate_route_heartrate_get": "GET /v2/usercollection/heartrate",
+            "startDatetime": "start_datetime",
+            "endDatetime": "end_datetime",
+            "personal_info_route_get": "GET /v2/usercollection/personal_info",
+            "sessions_route_session_get": "GET /v2/usercollection/session",
+            "tags_route_tag_get": "GET /v2/usercollection/tag",
+            "workouts_route_workout_get": "GET /v2/usercollection/workout",
+            "optionalParameters": "Options"
+        }
+    }
+}

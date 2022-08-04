@@ -1,0 +1,29 @@
+{
+    "OuraApi": {
+        "label": {
+            "service": "サービス",
+            "method": "メソッド",
+            "host": "ホスト",
+            "header": "ヘッダ",
+            "value": "値",
+            "isQuery": "クエリ"
+        },
+        "status": {
+            "requesting": "要求中"
+        },
+        "parameters": {
+            "daily_activity_route_daily_activity_get": "GET /v2/usercollection/daily_activity",
+            "startDate": "start_date",
+            "endDate": "end_date",
+            "nextToken": "next_token",
+            "heartrate_route_heartrate_get": "GET /v2/usercollection/heartrate",
+            "startDatetime": "start_datetime",
+            "endDatetime": "end_datetime",
+            "personal_info_route_get": "GET /v2/usercollection/personal_info",
+            "sessions_route_session_get": "GET /v2/usercollection/session",
+            "tags_route_tag_get": "GET /v2/usercollection/tag",
+            "workouts_route_workout_get": "GET /v2/usercollection/workout",
+            "optionalParameters": "任意項目"
+        }
+    }
+}
